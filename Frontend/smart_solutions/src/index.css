@@ -1,5 +1,13 @@
-body {
+html, body, #root, .app  {
+  height: 100vh;
+  width: 100vw;
   margin: 0;
+  padding: 0;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -7,7 +15,32 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.main {
+  height: 100%;
+  width: 100%;
+  overflow: auto
+}
+
+::-webkit-scrollbar {
+  width: 15px;;
+}
+
+::-webkit-scrollbar-track {
+  background: #e0e0e0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+td {
+  padding: .1rem .2rem;
+}
+
+td:nth-of-type(even) {
+  text-align: end;
 }
