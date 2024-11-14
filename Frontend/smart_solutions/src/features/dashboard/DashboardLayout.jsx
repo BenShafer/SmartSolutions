@@ -2,9 +2,12 @@ import { useState } from "react";
 import { Box, Paper, Grid } from "@mui/material";
 import DateSpanControl from './DateSpanControl';
 import MainDataPlot from './MainDataPlot';
+import StatsCardLayout from './StatCardsLayout';
+import DemandCard from './DemandCard';
 import dayjs from 'dayjs';
 
 
+// TODO Set widths for cards so they don't move so much.
 export default function DashboardLayout() {
     const [date, setDate] = useState({
         span: 'month',
@@ -35,6 +38,8 @@ export default function DashboardLayout() {
                 width:"100%", 
                 height:"auto", 
                 }} >
+                <StatsCardLayout date={date} />
+                <DemandCard date={date} />            
             </Grid>
         </Box>
     )

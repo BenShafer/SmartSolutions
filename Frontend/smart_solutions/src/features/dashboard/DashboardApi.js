@@ -11,6 +11,8 @@ async function fetchData(endpoint, signal=null, data=null) {
 
 const DashboardApi = {
     getMainData: (span, signal) => fetchData('data/main', signal, {'span': span}),
+    getStatsData: (startDate, endDate, signal) => fetchData('data/stats', signal, {'start_date': startDate.format('YYYY-MM-DD'), 'end_date': endDate.format('YYYY-MM-DD')}),
+    getDemandData: (startDate, signal) => fetchData('data/demand', signal, {'start_date': startDate.format('YYYY-MM-DD')}),
 };
 
 export default DashboardApi;
