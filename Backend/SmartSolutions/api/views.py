@@ -16,3 +16,16 @@ def main(request):
 		df = ma.get_main_data(span=data.get('span'))
 		print(df.head(), df.tail(3))
 		return JsonResponse(df.to_json(orient='records', date_format='iso'), safe=False)
+
+def stats(request):
+	if request.method == 'POST':
+		data = JSONParser().parse(request)
+		print(data)
+		df = ma.get_kwh_costs(start_date=data.get('start_date'), end_date=data.get('end_date'))
+		return JsonResponse(df.to_json(orient='records'), safe=False)
+	
+def demand(request):
+	if request.method == 'POST':
+		data = JSONParser().parse(request)
+		demand = ma.get_demand_cost(date=data.get('start_date'))
+		return JsonResponse(json.dumps(demand), safe=False)
