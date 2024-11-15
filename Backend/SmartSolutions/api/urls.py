@@ -7,4 +7,5 @@ urlpatterns = [
     path("data/main", views.main),
     path("data/stats", views.stats),
     path("data/demand", views.demand),
+    path("data/battery", views.battery),
 ]

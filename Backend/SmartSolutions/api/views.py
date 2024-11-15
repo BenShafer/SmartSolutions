@@ -29,3 +29,11 @@ def demand(request):
 		data = JSONParser().parse(request)
 		demand = ma.get_demand_cost(date=data.get('start_date'))
 		return JsonResponse(json.dumps(demand), safe=False)
+
+def battery(request):
+	if request.method == 'POST':
+		data = JSONParser().parse(request)
+		print(data)
+		savings = ma.get_battery_savings(start_date=data.get('start_date'), end_date=data.get('end_date'), battery_size=data.get('battery_size'))
+		print(savings)
+		return JsonResponse(json.dumps(savings), safe=False)
