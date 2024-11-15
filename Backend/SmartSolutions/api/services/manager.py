@@ -82,6 +82,54 @@ def get_battery_savings(start_date, end_date, battery_size):
 		reduced_cost += calc_demand_cost(reduce_watts(month_df, battery_size))['cost']
 	return {"before":round(original_cost, 2), "after":round(reduced_cost, 2), "savings": round(original_cost - reduced_cost, 2)}
 
+def get_all_vars():
+	main_df = dl.get_main_watts()
+	wet_df = dl.get_weather()
+	cal_df = dl.get_calendar()
+	sub_locs = get_sub_location_labels()
+	sub_vars = ["watts", "wh", "amps", "VAR", "pwr_fctr"]
+	columns_df = {
+        "Main": list(main_df.columns),
+        "Sub Locations": list(sub_locs),
+		"Sub Variables": list(sub_vars),
+        "Weather": list(wet_df.drop(columns=['datetime', 'conditions']).columns),
+        "Calendar": list(cal_df.drop(columns=['datetime', 'billing']).columns)
+    }
+	return json.dumps(columns_df)
+
+def get_corrs(variables):
+	def combine_sub_vars(locations, columns):
+		sub_cols = []
+		for sub in locations:
+			for col in columns:
+				sub_cols.append(sub + "_" + col)
+		return sub_cols
+	df = pd.DataFrame()
+	if variables.get("Main"):
+		main_df = dl.get_main_watts()
+		df = pd.concat([df, main_df[variables["Main"]]], axis=1)
+	if variables.get("Sub Locations") or variables.get("Sub Variables"):
+		sub_df = dl.get_sub_data()
+		if variables.get("Sub Locations") and variables.get("Sub Variables"):
+			sub_locations = variables.get("Sub Locations")
+			sub_vars = variables.get("Sub Variables")
+			sub_cols = combine_sub_vars(sub_locations, sub_vars)
+		elif variables.get("Sub Locations"):
+			sub_locations = variables.get("Sub Locations")
+			sub_vars = ["watts", "wh", "amps", "VAR", "pwr_fctr"]
+			sub_cols = combine_sub_vars(sub_locations, sub_vars)
+		elif variables.get("Sub Variables"):
+			sub_vars = variables.get("Sub Variables")
+			sub_locations = get_sub_location_labels()
+			sub_cols = combine_sub_vars(sub_locations, sub_vars)
+		df = pd.concat([df, sub_df[sub_cols]], axis=1)
+	if variables.get("Weather"):
+		wet_df = dl.get_weather()
+		df = pd.concat([df, wet_df[variables["Weather"]]], axis=1)
+	if variables.get("Calendar"):
+		cal_df = dl.get_calendar()
+		df = pd.concat([df, cal_df[variables["Calendar"]]], axis=1)
+	return df.corr()
 
 
 ################################ UTILS #######################################
@@ -161,3 +209,9 @@ def reduce_watts(df, battery_size):
 	# Remove the 'date' column
 	df.drop('date', axis=1, inplace=True)
 	return df
+
+def get_sub_location_labels():
+	df = dl.get_sub_data()
+	sub = pd.Series(re.findall("A\d+", str(df.columns))) # Get all sub locations 
+	sub.drop_duplicates(inplace=True)
+	return sub.tolist()

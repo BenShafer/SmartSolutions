@@ -8,4 +8,6 @@ urlpatterns = [
     path("data/stats", views.stats),
     path("data/demand", views.demand),
     path("data/battery", views.battery),
+    path("analysis", views.analysis),
+    path("analysis/correlations", views.correlations),  
 ]

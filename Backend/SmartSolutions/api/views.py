@@ -37,3 +37,13 @@ def battery(request):
 		savings = ma.get_battery_savings(start_date=data.get('start_date'), end_date=data.get('end_date'), battery_size=data.get('battery_size'))
 		print(savings)
 		return JsonResponse(json.dumps(savings), safe=False)
+
+def analysis(request):
+	print(request)
+	return JsonResponse(ma.get_all_vars(), safe=False)
+
+def correlations(request):
+	if request.method == 'POST':
+		data = JSONParser().parse(request)
+		corr_matrix = ma.get_corrs(data)
+		return JsonResponse(corr_matrix.to_json(orient='split'), safe=False)
