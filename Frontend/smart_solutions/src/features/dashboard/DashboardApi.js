@@ -13,7 +13,7 @@ const DashboardApi = {
     getMainData: (span, signal) => fetchData('data/main', signal, {'span': span}),
     getStatsData: (startDate, endDate, signal) => fetchData('data/stats', signal, {'start_date': startDate.format('YYYY-MM-DD'), 'end_date': endDate.format('YYYY-MM-DD')}),
     getDemandData: (startDate, signal) => fetchData('data/demand', signal, {'start_date': startDate.format('YYYY-MM-DD')}),
+    getBatteryData: (startDate, endDate, batterySize, signal) => fetchData('data/battery', signal, {'start_date': startDate.format('YYYY-MM-DD'), 'end_date': endDate.format('YYYY-MM-DD'), 'battery_size': batterySize}),
 };
 
 export default DashboardApi;
-

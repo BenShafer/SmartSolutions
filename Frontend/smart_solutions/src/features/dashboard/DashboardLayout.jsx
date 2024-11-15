@@ -4,6 +4,7 @@ import DateSpanControl from './DateSpanControl';
 import MainDataPlot from './MainDataPlot';
 import StatsCardLayout from './StatCardsLayout';
 import DemandCard from './DemandCard';
+import BatteryCard from './BatteryCard';
 import dayjs from 'dayjs';
 
 
@@ -39,7 +40,8 @@ export default function DashboardLayout() {
                 height:"auto", 
                 }} >
                 <StatsCardLayout date={date} />
-                <DemandCard date={date} />            
+                <DemandCard date={date} />
+                <BatteryCard date={date} />
             </Grid>
         </Box>
     )
