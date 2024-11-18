@@ -47,3 +47,9 @@ def correlations(request):
 		data = JSONParser().parse(request)
 		corr_matrix = ma.get_corrs(data)
 		return JsonResponse(corr_matrix.to_json(orient='split'), safe=False)
+
+def forecast(request):
+	if request.method == 'POST':
+		data = JSONParser().parse(request)
+		forecast = ma.predict_1_week_TFT(start_date=data.get('start_date'))
+		return JsonResponse(forecast.to_json(orient='records'), safe=False)

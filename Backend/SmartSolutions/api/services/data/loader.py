@@ -39,3 +39,30 @@ def get_sub_data():
 def get_weather():
     # Columns: datetime,temp,dew,humidity,precip,precipprob,windgust,windspeed,winddir,sealevelpressure,cloudcover,visibility,solarradiation,solarenergy,uvindex,severerisk,conditions,conditions_encoded
     return pd.read_csv(DATA_DIR + 'weather.csv', parse_dates=['datetime']).astype(np.float32, errors='ignore')
+
+def get_covariates():
+    RESAMPLE_FREQ = '1h'
+    kept_future_cov = ['datetime', 'cloudcover', 'dew', 'holiday', 'solarradiation', 'temp', 'humidity', 'sealevelpressure']
+    kept_past_cov =  ['datetime', 'A2_pwr_fctr', 'A4_pwr_fctr', 'A4_VAR', 'A4_watts', 'A4_wh', 'A5_amps', 'A5_pwr_fctr', 'A5_VAR', 'A5_wh', 'A6_amps', 'A6_pwr_fctr', 'A6_VAR', 'A6_wh', 'A7_pwr_fctr', 'A9_amps', 'A9_pwr_fctr', 'A9_VAR', 'A9_wh', 'A10_amps', 'A10_pwr_fctr', 'A10_wh', 'A11_pwr_fctr', 'A11_wh', 'A12_amps', 'A12_pwr_fctr', 'A12_VAR', 'A12_wh', 'A13_pwr_fctr', 'A13_wh', 'A14_pwr_fctr', 'A14_wh', 'A15_watts', 'A16_amps', 'A16_VAR', 'A16_wh', 'A17_pwr_fctr', 'A18_amps', 'A19_amps']
+    df_future_cov = get_calendar()
+    df_weather = get_weather()
+    df_future_cov = df_future_cov.merge(df_weather, on='datetime', how='left')
+    df_future_cov = df_future_cov[kept_future_cov]
+    df_sub = get_sub_data()
+    subs = pd.Series(re.findall("A\d+", str(df_sub.columns))) # Get all sub locations 
+    subs.drop_duplicates(inplace=True)
+    subs = pd.Series(subs.tolist())
+    sub_pwr_fctr_locs = ['datetime']
+    for sub in subs:
+        col = sub + "_pwr_fctr" 
+        sub_pwr_fctr_locs.append(col)
+    df_past_cov = df_sub[sub_pwr_fctr_locs].resample(RESAMPLE_FREQ, on='datetime').mean().reset_index()
+    sub_pwr_fctr_locs.remove('datetime')
+    df_sub.drop(columns=sub_pwr_fctr_locs, inplace=True)
+    df_sub = df_sub.resample(RESAMPLE_FREQ, on='datetime').sum().reset_index()
+    df_past_cov = df_past_cov.merge(df_sub, on='datetime', how='left')
+    df_past_cov = df_past_cov[kept_past_cov]
+    df_future_cov = df_future_cov.resample(RESAMPLE_FREQ, on='datetime').mean().reset_index()
+    future_covariates = TimeSeries.from_dataframe(df_future_cov, time_col="datetime", freq=RESAMPLE_FREQ)
+    past_covariates = TimeSeries.from_dataframe(df_past_cov, time_col="datetime", freq=RESAMPLE_FREQ)
+    return past_covariates, future_covariates

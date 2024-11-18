@@ -10,4 +10,5 @@ urlpatterns = [
     path("data/battery", views.battery),
     path("analysis", views.analysis),
     path("analysis/correlations", views.correlations),  
+    path("insights/forecast", views.forecast),
 ]

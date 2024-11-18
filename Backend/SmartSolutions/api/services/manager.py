@@ -131,6 +131,35 @@ def get_corrs(variables):
 		df = pd.concat([df, cal_df[variables["Calendar"]]], axis=1)
 	return df.corr()
 
+def predict_1_week_TFT(start_date):
+	RESAMPLE_FREQ = '1h'
+	HOURS = 1
+	DAYS = 24 * HOURS
+	WEEKS = 7 * DAYS * HOURS
+	HORIZON = WEEKS*1
+	train_cutoff = '2023-10-09'
+	val_cutoff = '2023-09-11'
+	df = dl.get_main_watts()
+	df = df.resample(RESAMPLE_FREQ, on='datetime').sum().reset_index() # need to sum the total watts
+	data = TimeSeries.from_dataframe(df, time_col="datetime", freq=RESAMPLE_FREQ)
+	data_train, data_test = data.split_before(pd.Timestamp(train_cutoff))
+	data_train, data_val = data_train.split_before(pd.Timestamp(val_cutoff))
+	scaler = Scaler()
+	scaler.fit_transform(data_train)
+	past_covariates, future_covariates = dl.get_covariates()
+	scaler_covs = Scaler()
+	future_cov_scaled = scaler_covs.fit_transform(future_covariates)
+	past_cov_scaled = scaler_covs.fit_transform(past_covariates)
+	model = TFTModel.load(BASE_DIR + '/api/services/models/TFT_1wk_90_model')
+	pred = model.predict(
+		n=HORIZON,
+		series=scaler.transform(data.drop_after(pd.Timestamp(start_date))),
+		num_samples=1,
+		past_covariates=past_cov_scaled,
+		future_covariates=future_cov_scaled,
+	)
+	return scaler.inverse_transform(pred).pd_dataframe().reset_index()
+
 
 ################################ UTILS #######################################
 def slice_data_by_date(data, start_date, end_date):
