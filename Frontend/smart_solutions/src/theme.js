@@ -1,35 +1,16 @@
 import { createContext, useState, useMemo } from "react";
 import { createTheme } from "@mui/material/styles";
-import { grey, blueGrey, green } from '@mui/material/colors';
+import { blueGrey, green } from '@mui/material/colors';
 
-// TODO finish tweaking colors.
+const lightSettings = {background: {default: "#eee"}};
 
-export const shades = (mode) => ({
-	...(mode === 'dark'
-	? {
-		primary: green,
-		secondary: blueGrey
-	} 
-	: {
-		primary: green,
-		secondary: grey
-	}),
-});
-
-// mui theme settings
-export const themeSettings = (mode) => {
-	const colors = shades(mode);
-
+const themeSettings = (mode) => {
 	return {
 		palette: {
 			mode: mode,
-			...(mode === 'dark'
-			? { primary: green,
-				secondary: blueGrey,
-				divider: green[200],
-			} : { primary: blueGrey,
-				secondary: grey
-			}),
+			primary: green,
+			secondary: blueGrey,
+			...(mode === 'dark' ? {} : lightSettings),
 		},
 		typography: {
 			fontFamily: ["Poppins", "sans-serif"].join(','),
@@ -67,7 +48,6 @@ export const ThemeContext = createContext({ toggleColorMode: () => {} });
 
 export const useMode = () => {
 	const [mode, setMode] = useState("dark");
-
 	const colorMode = useMemo(() => ({
 		toggleColorMode: () => setMode((prevMode) => (prevMode === "light" ? "dark" : "light"))
 		}),
