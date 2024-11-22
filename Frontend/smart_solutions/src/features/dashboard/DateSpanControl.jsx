@@ -1,11 +1,11 @@
-import { Box, Typography, IconButton, FormControl, Select, MenuItem, InputLabel } from "@mui/material";
+import { Box, Typography, IconButton, FormControl, Select, MenuItem, InputLabel } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import dayjs from 'dayjs';
 import { DATA_START, DATA_END } from 'src/constants.js';
 
 export default function DateSpanControl( {date, setDate} ) {
-	const spanIsAll = (date.span === 'all');
+	const spanIsAll = (date?.span === 'all');
 
     function updateDate(newDate) {
         setDate({
@@ -25,12 +25,12 @@ export default function DateSpanControl( {date, setDate} ) {
             })
 		} else {
 			newDate = date;
-			newDate.span = span;
+			newdate?.span = span;
 
 			if (span === 'day') {
-				newDate.start = dayjs(newDate.end).subtract(1, 'day');
+				newdate?.start = dayjs(newdate?.end).subtract(1, 'day');
 			} else {
-				newDate.start = dayjs(newDate.end).startOf(span);
+				newdate?.start = dayjs(newdate?.end).startOf(span);
 			}
             updateEndDate(newDate);
 		}
@@ -40,38 +40,38 @@ export default function DateSpanControl( {date, setDate} ) {
 		let newDate = date;
 
 		if (direction === 'left') {
-			newDate.start = dayjs(newDate.start).subtract(1, newDate.span);
+			newdate?.start = dayjs(newdate?.start).subtract(1, newdate?.span);
 		} else if (direction === 'right') {
-			newDate.start = dayjs(newDate.start).add(1, newDate.span);
+			newdate?.start = dayjs(newdate?.start).add(1, newdate?.span);
 		}
 		updateEndDate(newDate);
 	}
 	
     function updateEndDate(newDate) {
-		if (newDate.span === 'day') {
-			newDate.end = newDate.start.endOf('day').add(1, 'day');
+		if (newdate?.span === 'day') {
+			newdate?.end = newdate?.start.endOf('day').add(1, 'day');
 		} else {
-			newDate.end = newDate.start.endOf(newDate.span);
+			newdate?.end = newdate?.start.endOf(newdate?.span);
 		}
         updateDate(newDate);
 	}
 
     return (
         <Box sx={{
-			flex: "0 0 auto",
-            display:"flex",
-            alignItems:"center",
-            justifyContent:"center",
+			flex: '0 0 auto',
+            display:'flex',
+            alignItems:'center',
+            justifyContent:'center',
             }}>
-			<Box sx={{mr:"auto"}}>
-				<SpanSelect timeSpan={date.span} handleSelected={handleSelectedSpan} />
+			<Box sx={{mr:'auto'}}>
+				<SpanSelect timeSpan={date?.span} handleSelected={handleSelectedSpan} />
 			</Box>
-			<Box sx={{ml:"-5%", mr:"auto", display:"flex", alignItems:"baseline", justifyContent:"center", pb:"1em"}}>
+			<Box sx={{ml:'-5%', mr:'auto', display:'flex', alignItems:'baseline', justifyContent:'center', pb:'1em'}}>
 				<IconButton disabled={spanIsAll} color={spanIsAll ? 'disabled' : 'primary'} sx={{outline:'2px solid'}} onClick={() => handleDateShift('left')} >
 					<ArrowBackIosIcon />
 				</IconButton> 
-					<Typography variant="h4" padding={"0em 0.5em"}>
-						{dayjs(date.start).format('YYYY-MM-DD')} — {dayjs(date.end).format('YYYY-MM-DD')}
+					<Typography variant="h4" padding={'0em 0.5em'}>
+						{dayjs(date?.start).format('YYYY-MM-DD')} — {dayjs(date?.end).format('YYYY-MM-DD')}
 					</Typography>
 				<IconButton disabled={spanIsAll} color={spanIsAll ? 'disabled' : 'primary'} sx={{outline:'2px solid'}} onClick={() => handleDateShift('right')} >
 					<ArrowForwardIosIcon  /> 
@@ -92,11 +92,11 @@ function SpanSelect( {timeSpan, handleSelected}) {
 				value={timeSpan}
 				onChange={(e) => handleSelected(e.target.value)}
 				>
-				<MenuItem value={"day"}>Day</MenuItem>
-				<MenuItem value={"week"}>Week</MenuItem>
-				<MenuItem value={"month"}>Month</MenuItem>
-				<MenuItem value={"year"}>Year</MenuItem>
-				<MenuItem value={"all"}>All</MenuItem>
+				<MenuItem value={'day'}>Day</MenuItem>
+				<MenuItem value={'week'}>Week</MenuItem>
+				<MenuItem value={'month'}>Month</MenuItem>
+				<MenuItem value={'year'}>Year</MenuItem>
+				<MenuItem value={'all'}>All</MenuItem>
 			</Select>
 		</FormControl>
 	)

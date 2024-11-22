@@ -1,23 +1,23 @@
-import { useState, useEffect } from "react";
-import { useMode, shades } from 'src/theme';
-import { Box } from "@mui/material";
+import { useState, useEffect } from 'react';
+import { Box } from '@mui/material';
 import dayjs from 'dayjs';
 import Plot from 'react-plotly.js';
 import DashboardApi from './DashboardApi';
+import { useTheme } from '@mui/material/styles';
 
 let isBetween = require('dayjs/plugin/isBetween');
 dayjs.extend(isBetween);
 
 export default function MainDataPlot( {date}) {
-	const [colorMode] = useMode();
-	const colors = shades(colorMode);
+	const colors = useTheme().palette;
 
 	const [mainData, setMainData] = useState(null);
 	const [yearlyData, setYearlyData] = useState(null);
 	const [plotData, setPlotData] = useState(null);
 	
-	const plotTitle = plotData?.x?.length === 0 ? "No Data" : "Energy Consumption (kW)";
-
+	const plotTitle = plotData?.x?.length === 0 ? 'No Data' : 'Energy Consumption (kW)';
+	const isDarkMode = colors.mode === 'dark';
+	
 	// Runs once on mount
     useEffect(() => {
 		const abortController = new AbortController();
@@ -49,23 +49,23 @@ export default function MainDataPlot( {date}) {
 	const layoutColors = {
 		xaxis: {
 			type:'date',
-			linecolor: colors.secondary[500], 
+			linecolor: colors.divider, 
 			tickfont: {
 				size: 10,
 			},
-			gridcolor: colors.secondary[800]  // Grid line color for X axis
+			gridcolor: colors.divider  // Grid line color for X axis
 		},
 		yaxis: {
 			automargin:true,
 			title: 'kW',
-			linecolor: colors.secondary[500],  // Axis line color
+			linecolor: colors.divider,  // Axis line color
 			ticksuffix: ' kW',
-			gridcolor: colors.secondary[600]  
+			gridcolor: colors.divider  
 		},
-		plot_bgcolor:colors.secondary[900],
-		paper_bgcolor:colors.secondary[900],
+		plot_bgcolor: isDarkMode ? colors.secondary[900] : colors.secondary[100],
+		paper_bgcolor: isDarkMode ? colors.secondary[900] : colors.secondary[100],
 		font: {
-			color:colors.secondary[50],
+			color:colors.text.primary,
 		},
 	}
 
@@ -102,8 +102,8 @@ export default function MainDataPlot( {date}) {
 	
 	return (
 		<Box sx={{
-			flex:"1 1 auto",
-			height:"100%",
+			flex:'1 1 auto',
+			height:'100%',
 			}}>
 			<Plot
 				data={[{
@@ -124,7 +124,7 @@ export default function MainDataPlot( {date}) {
 				}}
 				config={{responsive: true}}
 				useResizeHandler={true}
-				style={{width: "100%", height: "100%"}}
+				style={{width: '100%', height: '100%'}}
 			/>
 		</Box>
 	);

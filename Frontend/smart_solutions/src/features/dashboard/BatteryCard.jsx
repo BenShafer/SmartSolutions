@@ -7,8 +7,8 @@ import GridItem from 'src/components/GridItem';
 // TODO Fix large battery size values return negative savings.
 export default function BatteryCard( {date} ) {  
     const [savings, setSavings] = useState(null);
-    const [batterySize, setBatterySize] = useState(100);
-    const [inputSize, setInputSize] = useState(100);
+    const [batterySize, setBatterySize] = useState(0);
+    const [inputSize, setInputSize] = useState(0);
     const [isCalculating, setIsCalculating] = useState(true);
 
     // Runs on date change
@@ -55,12 +55,12 @@ export default function BatteryCard( {date} ) {
     }
 
 	return (
-        <>          
-            <GridItem title={"Battery Savings Estimator"}>
+        <>  
+            <GridItem long title={"Battery Savings Estimator"}>
                 <Box sx={{display:"flex",
                     alignItems:"baseline",
                     flexDirection:"column",
-                    minWidth:"10em",
+                    minWidth:"14em",
                     p:".1em",
                     minHeight:"1em",
             }} >
@@ -75,7 +75,7 @@ export default function BatteryCard( {date} ) {
                         value={inputSize}
                         onChange={handleBatterySizeChange}
                     />
-                    <Button onClick={() => handleCalculateSavings()} sx={{ml:"1em"}} variant="contained">Submit</Button>
+                    <Button onClick={() => handleCalculateSavings()} sx={{ml:"1em"}} variant="contained" color="secondary" >Submit</Button>
                 </Box>
             </GridItem>
         </>

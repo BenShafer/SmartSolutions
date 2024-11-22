@@ -1,14 +1,13 @@
-import { useState, useEffect } from "react";
-import { useMode, shades } from 'src/theme';
+import { useState, useEffect } from 'react';
 import DashboardApi from './DashboardApi';
 import GridItem from 'src/components/GridItem';
+import { useTheme } from '@mui/material/styles';
 
 // TODO Add loading state.
 // TODO Maybe split the 2 cards.
-
 export default function StatCardsLayout( {date} ) {
-    const [colorMode] = useMode();
-	const colors = shades(colorMode);
+    // const [colorMode] = useMode();
+	const colors = useTheme().palette;
     const [statsData, setStatsData] = useState(null);
 
     // Runs on date change
@@ -28,7 +27,7 @@ export default function StatCardsLayout( {date} ) {
         return (
             <table style={{ 
                 borderCollapse: 'collapse',
-                width: 'auto',
+                width: '100%',
                 }}>
                 <thead>
                     <tr>
@@ -40,7 +39,7 @@ export default function StatCardsLayout( {date} ) {
                     {data?.map((stat, index) => (
                         <tr key={stat.billing}
                             style={{
-                                backgroundColor: index % 2 === 0 ? colors.secondary[800] : colors.secondary[900]
+                                backgroundColor: index % 2 === 0 ? 'rgba(120, 120, 120, 0.15)' : 'rgba(120, 120, 120, 0.3)'
                             }} >
                             <td style={{paddingRight: '1rem'}}>{stat.billing}</td>
                             <td>${stat.total_cost}</td>    
@@ -48,9 +47,8 @@ export default function StatCardsLayout( {date} ) {
                     ))}
                     <tr style={{
                         fontWeight: '500',
-                        color: colors.secondary[50],                        
-                        backgroundColor: colors.secondary[700]                    
-                        }} >
+                        backgroundColor: 'rgba(120, 120, 120, 0.4)'
+                    }} >
                         <td>Total</td>
                         <td>${data?.[0]?.total_costs}</td>
                     </tr>
@@ -63,7 +61,7 @@ export default function StatCardsLayout( {date} ) {
         return (
             <table style={{ 
                 borderCollapse: 'collapse',
-                width: 'auto',
+                width: '100%',
                 }}>
                     <thead>
                         <tr>
@@ -76,7 +74,7 @@ export default function StatCardsLayout( {date} ) {
                         <tr
                         key={stat.billing}
                         style={{
-                            backgroundColor: index % 2 === 0 ? colors.secondary[800] : colors.secondary[900]
+                            backgroundColor: index % 2 === 0 ? 'rgba(120, 120, 120, 0.15)' : 'rgba(120, 120, 120, 0.3)'
                         }} >
                             <td style={{paddingRight: '1rem'}}>{stat.billing}</td>
                             <td>{stat.total_kwh}</td>    
@@ -85,8 +83,7 @@ export default function StatCardsLayout( {date} ) {
                     <tr
                         style={{
                             fontWeight: '500',
-                            color: colors.secondary[50],
-                            backgroundColor: colors.secondary[700]
+                            backgroundColor: 'rgba(120, 120, 120, 0.4)'
                         }} >
                         <td>Total</td>
                         <td>{data?.[0]?.total_kwhs}</td>
@@ -98,18 +95,12 @@ export default function StatCardsLayout( {date} ) {
 
 	return (
         <>
-            <GridItem title={"Billing Costs"}>
+            <GridItem title={'Billing Costs'}>
                 <CostTable data={statsData} />
             </GridItem>
-            
-            <GridItem title={"Electricity Use"}>
+            <GridItem title={'Electricity Use'}>
                 <UsageTable data={statsData} />
             </GridItem>
         </>
     )
 }
-
-
-
-
-

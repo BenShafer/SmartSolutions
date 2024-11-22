@@ -44,3 +44,7 @@ td {
 td:nth-of-type(even) {
   text-align: end;
 }
+
+.Mui-selected {
+  background: #80808023 !important;
+}

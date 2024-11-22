@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
-import { Typography } from "@mui/material";
+import { useState, useEffect } from 'react';
+import { Typography } from '@mui/material';
 import DashboardApi from './DashboardApi';
 import dayjs from 'dayjs';
 import GridItem from 'src/components/GridItem';
-
 
 // TODO Decide what to do when not on month span.
 export default function DemandCard( {date} ) {  
@@ -16,7 +15,7 @@ export default function DemandCard( {date} ) {
         const signal = abortController.signal;
         async function loadData(signal) {
             setIsLoading(true);
-            let data = await DashboardApi.getDemandData(date.start, signal);
+            let data = await DashboardApi.getDemandData(date?.start, signal);
             setDemandData(data);
             setIsLoading(false);       
         };
@@ -41,7 +40,7 @@ export default function DemandCard( {date} ) {
 
 	return (
         <>
-            <GridItem title={"Demand Charge"}>
+            <GridItem title={'Demand Charge'}>
                 <Typography variant="h5" ml=".5em">
                     <Demand />                          
                 </Typography>
@@ -49,8 +48,3 @@ export default function DemandCard( {date} ) {
         </>
     )
 }
-
-
-
-
-
