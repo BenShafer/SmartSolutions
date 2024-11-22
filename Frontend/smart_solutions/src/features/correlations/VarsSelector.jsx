@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Box, Typography, Checkbox } from "@mui/material";
+import { useState, useEffect } from 'react';
+import { Box, Typography, Checkbox } from '@mui/material';
 import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
 import ListItem from '@mui/material/ListItem';
@@ -8,7 +8,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import CorrelationsApi from "./CorrelationApi";
+import CorrelationsApi from './CorrelationApi';
 
 // TODO remember selected vars.
 export default function VarSelector( {selectedVars, setSelectedVars} ) {
@@ -21,9 +21,9 @@ export default function VarSelector( {selectedVars, setSelectedVars} ) {
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
-        async function loadData(signal) {		
+        async function loadData() {		
 			if (varsData === null) {
-				let vars = await CorrelationsApi.getVarsData(signal);                                
+				const vars = await CorrelationsApi.getVarsData(signal);                                
 				if (vars !== undefined) {
 						localStorage.setItem('vars', JSON.stringify(vars));
 				}
@@ -54,7 +54,7 @@ export default function VarSelector( {selectedVars, setSelectedVars} ) {
 		  [group]: newSelection,
 		});
 	
-		let allSelected = {
+		const allSelected = {
 			...selectedVars,
 			[group]: newSelection,
 		}
@@ -74,7 +74,7 @@ export default function VarSelector( {selectedVars, setSelectedVars} ) {
 		[group]: newSelection,
 		});
 		
-		let allSelected = {
+		const allSelected = {
 			...selectedVars,
 			[group]: newSelection,
 		}
@@ -99,7 +99,7 @@ export default function VarSelector( {selectedVars, setSelectedVars} ) {
 
 	return (
 		<Box sx={{
-			flex: "1 1 auto",
+			flex: '1 1 auto',
 			overflow:'auto',
 			height: '100%',
 		}}>		

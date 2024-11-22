@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Box, IconButton, Typography, Paper } from "@mui/material";
+import { useState } from 'react';
+import { Box, IconButton, Typography, Paper } from '@mui/material';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 
 // TODO add animations
@@ -9,9 +9,9 @@ export default function Sidebar( {children} ) {
 	const [isCollapsed, setIsCollapsed] = useState(false);
 
 	return (
-		<Paper elevation={1} sx={{
-			maxWidth:"20vw",
-			width:"auto",
+		<Paper elevation={3} sx={{
+			maxWidth:'20vw',
+			width:'auto',
 			height: '100%',
 			display:'flex',
 			flexDirection: 'column',

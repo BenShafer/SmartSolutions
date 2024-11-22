@@ -1,21 +1,22 @@
-import { useState, useEffect } from "react";
-import { useMode, shades } from 'src/theme';
+import { useState, useEffect } from 'react';
 import Plot from 'react-plotly.js';
-import CorrelationsApi from "./CorrelationApi";
+import CorrelationsApi from './CorrelationApi';
+import { useTheme } from '@mui/material/styles';
 
 // TODO resize plot based on # of vars used
 // TODO remember selection and corr data
 
 export default function HeatMapPlot( {corrVars} ) {
-    const [theme, colorMode] = useMode();
-	const colors = shades(colorMode);
+	const colors = useTheme().palette;
     const [corrData, setCorrData] = useState(null);
+
+	const isDarkMode = colors.mode === 'dark';
 
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
-        async function loadData(signal) {          
-            let data = await CorrelationsApi.getCorrData(corrVars, signal);                                
+        async function loadData() {          
+            const data = await CorrelationsApi.getCorrData(corrVars, signal);                                
             setCorrData(data);
         };
         loadData(signal);
@@ -24,31 +25,28 @@ export default function HeatMapPlot( {corrVars} ) {
     
 	const layoutColors = {
 		xaxis: {
-			linecolor: colors.secondary[500], 
+			linecolor: colors.divider, 
 			tickfont: {
 				size: 10,
 			},
-			gridcolor: colors.secondary[800]  // Grid line color for X axis
+			gridcolor: colors.divider  // Grid line color for X axis
 		},
 		yaxis: {
 			automargin:true,
-			linecolor: colors.secondary[500],  // Axis line color
+			linecolor: colors.divider,  // Axis line color
 			tickfont: {
 			},
-			gridcolor: colors.secondary[600]  
+			gridcolor: colors.divider  
 		},
-		plot_bgcolor:colors.secondary[900],
-		paper_bgcolor:colors.secondary[900],
+		plot_bgcolor: isDarkMode ? colors.secondary[900] : colors.secondary[50],
+		paper_bgcolor: isDarkMode ? colors.secondary[900] : colors.secondary[50],
 		font: {
-			color:colors.secondary[50],
+			color:colors.text.primary,
 		},
 	}
 
-	let title = "No Data"
-	if (corrData == null) {
-	} else {
-		title = "Correlations"
-	}
+	let title = 'No Data'
+	if (corrData != null) title = 'Correlations';
 
 	return (
 		<Plot
@@ -71,7 +69,7 @@ export default function HeatMapPlot( {corrVars} ) {
 			}}
 			config={{responsive: true}}
 			useResizeHandler={true}
-			style={{width: "100%", height: "100%"}}
+			style={{width: '100%', height: '100%'}}
 		/>
 	)
 }
