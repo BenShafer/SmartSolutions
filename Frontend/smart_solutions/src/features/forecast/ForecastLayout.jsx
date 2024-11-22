@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
-import { Box, Typography, Paper } from "@mui/material";
-import ForecastPlot from "./ForecastPlot";
+import { Box, Typography, Paper } from '@mui/material';
+import ForecastPlot from './ForecastPlot';
 
-let isBetween = require('dayjs/plugin/isBetween');
+const isBetween = require('dayjs/plugin/isBetween');
 dayjs.extend(isBetween);
 
 export default function ForecastLayout() {
@@ -11,20 +11,20 @@ export default function ForecastLayout() {
 
     return (
         <Box sx={{
-			width:"100%",
-			height:"100%",
-			padding:"1rem",
+			width:'100%',
+			height:'100%',
+			padding:'1rem',
 			}}>
-			<Paper elevation={2} sx={{
-				padding:"1rem",
-				width:"100%",
-				height:"auto",
-				margin:"auto",
-				minHeight:"32rem",
+			<Paper elevation={3} sx={{
+				padding:'1rem',
+				width:'100%',
+				height:'auto',
+				margin:'auto',
+				minHeight:'32rem',
 				}} >
-				<Box sx={{m:"auto", display:"flex", alignItems:"baseline", justifyContent:"center", pb:"1em"}}>
+				<Box sx={{m:'auto', display:'flex', alignItems:'baseline', justifyContent:'center', pb:'1em'}}>
 					<Typography variant="h4" >
-						Forecast for {dayjs(startDate).format('YYYY-MM-DD')} -- {dayjs(endDate).format('YYYY-MM-DD')}
+						{dayjs(startDate).format('YYYY-MM-DD')} — {dayjs(endDate).format('YYYY-MM-DD')}
 					</Typography>
 				</Box>
 				<ForecastPlot startDate={startDate} />

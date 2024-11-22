@@ -25,33 +25,33 @@ export default function DateSpanControl( {date, setDate} ) {
             })
 		} else {
 			newDate = date;
-			newdate?.span = span;
+			newDate.span = span;
 
 			if (span === 'day') {
-				newdate?.start = dayjs(newdate?.end).subtract(1, 'day');
+				newDate.start = dayjs(newDate.end).subtract(1, 'day');
 			} else {
-				newdate?.start = dayjs(newdate?.end).startOf(span);
+				newDate.start = dayjs(newDate.end).startOf(span);
 			}
             updateEndDate(newDate);
 		}
 	}
 
 	function handleDateShift(direction) {
-		let newDate = date;
+		const newDate = date;
 
 		if (direction === 'left') {
-			newdate?.start = dayjs(newdate?.start).subtract(1, newdate?.span);
+			newDate.start = dayjs(newDate.start).subtract(1, newDate.span);
 		} else if (direction === 'right') {
-			newdate?.start = dayjs(newdate?.start).add(1, newdate?.span);
+			newDate.start = dayjs(newDate.start).add(1, newDate.span);
 		}
 		updateEndDate(newDate);
 	}
 	
     function updateEndDate(newDate) {
-		if (newdate?.span === 'day') {
-			newdate?.end = newdate?.start.endOf('day').add(1, 'day');
+		if (newDate.span === 'day') {
+			newDate.end = newDate.start.endOf('day').add(1, 'day');
 		} else {
-			newdate?.end = newdate?.start.endOf(newdate?.span);
+			newDate.end = newDate.start.endOf(newDate.span);
 		}
         updateDate(newDate);
 	}

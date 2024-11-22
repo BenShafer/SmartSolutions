@@ -1,19 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
-import { Box } from "@mui/material";
+import { Box } from '@mui/material';
 import Plot from 'react-plotly.js';
-import ForecastApi from "./ForecastApi";
-import { useTheme } from "@mui/material/styles";
+import ForecastApi from './ForecastApi';
+import { useTheme } from '@mui/material/styles';
 
 export default function ForecastPlot( {startDate} ) {
 	const colors = useTheme().palette;
 	const [plotData, setPlotData] = useState(null);
 
+	const isDarkMode = colors.mode === 'dark';
+
+	// Runs once on mount
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
-        async function loadData(signal) {                       
-            let data = await ForecastApi.getPrediction(startDate, signal);                                
+        async function loadData() {                       
+            const data = await ForecastApi.getPrediction(startDate, signal);                                
             plot(data);
         };
         loadData(signal);
@@ -23,31 +26,31 @@ export default function ForecastPlot( {startDate} ) {
 	const layoutColors = {
 		xaxis: {
 			type:'date',
-			linecolor: colors.secondary[500], 
+			linecolor: colors.divider, 
 			tickfont: {
 				size: 10,
 			},
-			gridcolor: colors.secondary[800]  // Grid line color for X axis
+			gridcolor: colors.divider  // Grid line color for X axis
 		},
 		yaxis: {
 			automargin:true,
 			title: 'kW',
-			linecolor: colors.secondary[500],  // Axis line color
+			linecolor: colors.divider,  // Axis line color
 			ticksuffix: ' kW',
 			tickfont: {
 			},
-			gridcolor: colors.secondary[600]  
+			gridcolor: colors.divider  
 		},
-		plot_bgcolor:colors.secondary[900],
-		paper_bgcolor:colors.secondary[900],
+		plot_bgcolor: isDarkMode ? colors.secondary[900] : colors.secondary[100],
+		paper_bgcolor: isDarkMode ? colors.secondary[900] : colors.secondary[100],
 		font: {
-			color:colors.secondary[50],
+			color:colors.text.primary,
 		},
 	}
 
 	function plot(data) {
-		let x = [];
-		let y = [];
+		const x = [];
+		const y = [];
 		if (data?.length > 0) {
 			data.map((item) => {
 				x.push(dayjs(item.datetime).format('YYYY-MM-DD HH:mm'));
@@ -62,7 +65,7 @@ export default function ForecastPlot( {startDate} ) {
 	
 	return (
         <Box sx={{
-            height:"100%",
+            height:'100%',
             }}>
             <Plot
                 data={[{
@@ -75,7 +78,7 @@ export default function ForecastPlot( {startDate} ) {
                 layout={{
                     autosize:true,
                     ...layoutColors,
-                    title: (plotData?.x?.length > 0) ? "1-Week Predicted Energy Consumption (kW)" : "Loading...",
+                    title: (plotData?.x?.length > 0) ? '1-Week Predicted Energy Consumption (kW)' : 'Loading...',
                     margin: {
                         t: 50,
                         r:50,
@@ -83,7 +86,7 @@ export default function ForecastPlot( {startDate} ) {
                 }}
                 config={{responsive: true}}
                 useResizeHandler={true}
-                style={{width: "100%", height: "100%"}}
+                style={{width: '100%', height: '100%'}}
             />
         </Box>
 	);

@@ -13,9 +13,9 @@ export default function DemandCard( {date} ) {
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
-        async function loadData(signal) {
+        async function loadData() {
             setIsLoading(true);
-            let data = await DashboardApi.getDemandData(date?.start, signal);
+            const data = await DashboardApi.getDemandData(date?.start, signal);
             setDemandData(data);
             setIsLoading(false);       
         };
@@ -35,7 +35,7 @@ export default function DemandCard( {date} ) {
                     Charge: ${demandData?.cost}
                 </div>
             </>
-        )
+        );
     }
 
 	return (
@@ -46,5 +46,5 @@ export default function DemandCard( {date} ) {
                 </Typography>
             </GridItem>
         </>
-    )
+    );
 }

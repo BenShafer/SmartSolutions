@@ -5,7 +5,7 @@ import Plot from 'react-plotly.js';
 import DashboardApi from './DashboardApi';
 import { useTheme } from '@mui/material/styles';
 
-let isBetween = require('dayjs/plugin/isBetween');
+const isBetween = require('dayjs/plugin/isBetween');
 dayjs.extend(isBetween);
 
 export default function MainDataPlot( {date}) {
@@ -22,10 +22,10 @@ export default function MainDataPlot( {date}) {
     useEffect(() => {
 		const abortController = new AbortController();
 		const signal = abortController.signal;
-		async function loadData(signal) {
-			let main = await DashboardApi.getMainData(date.span, signal);
+		async function loadData() {
+			const main = await DashboardApi.getMainData(date.span, signal);
 			setMainData(main);
-			let yearly = await DashboardApi.getMainData('all', signal);
+			const yearly = await DashboardApi.getMainData('all', signal);
 			setYearlyData(yearly);
 			plot(date.start, date.end, date.span, main);
 		};
@@ -35,15 +35,9 @@ export default function MainDataPlot( {date}) {
 
 	// Runs on date change
 	useEffect(() => {
-		const abortController = new AbortController();
-		const signal = abortController.signal;
-		async function loadData(signal) {
-			if (mainData) {
-				plot(date.start, date.end, date.span);				
-			};
+		if (mainData) {
+			plot(date.start, date.end, date.span);				
 		};
-		loadData(signal);
-		return () => abortController.abort();
 	}, [date]);
 
 	const layoutColors = {

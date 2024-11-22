@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Box, Typography, Button, TextField } from "@mui/material";
+import { useState, useEffect } from 'react';
+import { Box, Typography, Button, TextField } from '@mui/material';
 import DashboardApi from './DashboardApi';
 import GridItem from 'src/components/GridItem';
 
@@ -15,9 +15,9 @@ export default function BatteryCard( {date} ) {
     useEffect(() => {
         const abortController = new AbortController();
         const signal = abortController.signal;
-        async function loadData(signal) {
+        async function loadData() {
             setIsCalculating(true);
-            let data = await DashboardApi.getBatteryData(date.start, date.end, batterySize, signal);
+            const data = await DashboardApi.getBatteryData(date.start, date.end, batterySize, signal);
             setSavings(data);
             setIsCalculating(false);    
         };
@@ -26,7 +26,7 @@ export default function BatteryCard( {date} ) {
     }, [date, batterySize]);
 
     function validateBatterySize(size) {
-        if (size === null || size < 0 || size === "") {
+        if (size === null || size < 0 || size === '') {
             setBatterySize(0);
         } else setBatterySize(size);
         setIsCalculating(false);
@@ -56,33 +56,28 @@ export default function BatteryCard( {date} ) {
 
 	return (
         <>  
-            <GridItem long title={"Battery Savings Estimator"}>
-                <Box sx={{display:"flex",
-                    alignItems:"baseline",
-                    flexDirection:"column",
-                    minWidth:"14em",
-                    p:".1em",
-                    minHeight:"1em",
+            <GridItem long title={'Battery Savings Estimator'}>
+                <Box sx={{display:'flex',
+                    alignItems:'baseline',
+                    flexDirection:'column',
+                    minWidth:'14em',
+                    p:'.1em',
+                    minHeight:'1em',
             }} >
-                <Typography variant="h5" ml=".5em">
+                <Typography variant='h5' ml='.5em'>
                     <BatterySavings />
                 </Typography>
                 </Box>
-                <Box sx={{pt:"1em", display:"flex",}}>
+                <Box sx={{pt:'1em', display:'flex',}}>
                     <TextField
-                        label="Enter battery size (kW)"
-                        type="number"
+                        label='Enter battery size (kW)'
+                        type='number'
                         value={inputSize}
                         onChange={handleBatterySizeChange}
                     />
-                    <Button onClick={() => handleCalculateSavings()} sx={{ml:"1em"}} variant="contained" color="secondary" >Submit</Button>
+                    <Button onClick={() => handleCalculateSavings()} sx={{ml:'1em'}} variant='contained' color='secondary' >Submit</Button>
                 </Box>
             </GridItem>
         </>
     )
 }
-
-
-
-
-
